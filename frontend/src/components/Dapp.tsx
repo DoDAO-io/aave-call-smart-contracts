@@ -4,7 +4,8 @@ import contractAddress from "@contracts/contract-address.json";
 // We import the contract's artifacts and address here, as we are going to be
 // using them with ethers
 import TokenArtifact from "@contracts/Token.json";
-import { Token } from "@contracts/typechain-types";
+import {Aave__factory, Token} from "@contracts/typechain-types";
+import { Aave } from "@contracts/typechain-types/contracts/Aave";
 import { JsonRpcProvider } from "@ethersproject/providers";
 
 // We'll use ethers to interact with the Ethereum network and our contract
@@ -65,6 +66,7 @@ export class Dapp extends React.Component<{}, DappState> {
   private _provider?: JsonRpcProvider;
   private initialState?: DappState;
   private _token: Token;
+  private _aave: Aave;
   private _pollDataInterval?: any;
   constructor(props: any) {
     super(props);
@@ -97,7 +99,14 @@ export class Dapp extends React.Component<{}, DappState> {
       TokenArtifact.abi,
       this._provider.getSigner(0)
     ) as Token;
+    this._aave = Aave__factory.connect(contractAddress.Aave, this._provider.getSigner(0));
   }
+
+  aaveSupply() {
+    console.log(this._aave)
+    this._aave.supply({gasLimit: 10000})
+  }
+
   render() {
     // Ethereum wallets inject the window.ethereum object. If it hasn't been
     // injected, we instruct the user to install MetaMask.
@@ -131,6 +140,7 @@ export class Dapp extends React.Component<{}, DappState> {
     // If everything is loaded, we render the application.
     return (
       <div className="container p-4">
+        <button onClick={() => this.aaveSupply() }>Supply</button>
         <div className="row">
           <div className="col-12">
             <h1>

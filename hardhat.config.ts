@@ -14,7 +14,7 @@ const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 const ACCOUNT_PRIVATE_KEY = process.env.ACCOUNT_PRIVATE_KEY!;
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.17",
+  solidity: "0.8.10",
   networks: {
     hardhat: {
       chainId: 1337,

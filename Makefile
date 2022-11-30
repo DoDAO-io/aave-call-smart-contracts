@@ -1,5 +1,6 @@
 compile:
 	npx hardhat compile
+	npx hardhat run scripts/compile.ts
 test:
 	npx hardhat test
 run-node:
