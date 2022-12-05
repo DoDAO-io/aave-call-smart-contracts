@@ -1,3 +1,4 @@
+import { DepositUSDC } from "@components/aave/DepositUSDC";
 import contractAddress from "@contracts/contract-address.json";
 
 // We import the contract's artifacts and address here, as we are going to be
@@ -7,7 +8,7 @@ import { Aave } from "@contracts/typechain-types/contracts/Aave";
 import { JsonRpcProvider } from "@ethersproject/providers";
 
 // We'll use ethers to interact with the Ethereum network and our contract
-import { ethers } from "ethers";
+import { ethers, providers } from "ethers";
 import React from "react";
 import { ConnectWallet } from "./ConnectWallet";
 import { Loading } from "./Loading";
@@ -126,9 +127,18 @@ export class Dapp extends React.Component<{}, DappState> {
     // If everything is loaded, we render the application.
     return (
       <div className="container p-4">
-        <button onClick={() => this.aaveSupply()}>Supply</button>
+        <div className="m-8">
+          <button onClick={() => this.aaveSupply()} className="btn btn-blue">
+            Supply
+          </button>
+        </div>
 
-        <hr />
+        <div className="m-8">
+          <DepositUSDC
+            account={this.state.selectedAddress!}
+            provider={this._provider as providers.Web3Provider}
+          />
+        </div>
 
         <div className="row">
           <div className="col-12">

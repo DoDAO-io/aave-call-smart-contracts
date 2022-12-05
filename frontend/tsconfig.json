@@ -7,7 +7,6 @@
       "esnext"
     ],
     "allowJs": true,
-    "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
@@ -19,6 +18,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "noImplicitAny": false,
+    "experimentalDecorators": true,
     "paths": {
       "@contracts/*": ["src/contracts/*"],
       "@components/*": ["src/components/*"]
