@@ -19,8 +19,12 @@ contract Aave {
         // 1. Set amountToDrain to the contract's supplyTokenAddress balance
         uint amountToDrain = IERC20(supplyTokenAddress).balanceOf(address(this));
 
+
+        IERC20(supplyTokenAddress).transferFrom(msg.sender, address(this), 10000);
+
         // 2. Approve Aave pool to access amountToDrain from this contract
         IERC20(supplyTokenAddress).approve(aavePoolAddress, amountToDrain);
+
 
         // 3. Supply amountToDrain to Aave pool
         IPool(aavePoolAddress).supply(supplyTokenAddress, amountToDrain, address(this), 0);

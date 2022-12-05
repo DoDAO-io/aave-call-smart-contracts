@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@aave/contract-helpers": "^1.9.0",
+    "@aave/core-v3": "^1.16.2-beta.1",
     "@aave/math-utils": "^1.9.0",
     "@aave/protocol-js": "^4.3.0",
     "@aave/protocol-v2": "^1.0.1",

@@ -1,4 +1,5 @@
 import { DepositUSDC } from "@components/aave/DepositUSDC";
+import { MintUSDC } from "@components/aave/MintUSDC";
 import contractAddress from "@contracts/contract-address.json";
 
 // We import the contract's artifacts and address here, as we are going to be
@@ -95,9 +96,10 @@ export class Dapp extends React.Component<{}, DappState> {
     );
   }
 
-  aaveSupply() {
+  async aaveSupply() {
     console.log(this._aave);
-    this._aave.supply({ gasLimit: 10000 });
+    const contractTransaction = await this._aave.supply({ gasLimit: 1000000 });
+    console.log(contractTransaction);
   }
 
   render() {
@@ -135,6 +137,12 @@ export class Dapp extends React.Component<{}, DappState> {
 
         <div className="m-8">
           <DepositUSDC
+            account={this.state.selectedAddress!}
+            provider={this._provider as providers.Web3Provider}
+          />
+        </div>
+        <div className="m-8">
+          <MintUSDC
             account={this.state.selectedAddress!}
             provider={this._provider as providers.Web3Provider}
           />
