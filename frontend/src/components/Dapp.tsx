@@ -9,7 +9,7 @@ import { Aave } from "@contracts/typechain-types/contracts/Aave";
 import { JsonRpcProvider } from "@ethersproject/providers";
 
 // We'll use ethers to interact with the Ethereum network and our contract
-import { ethers, providers } from "ethers";
+import { BigNumber, ethers, providers } from "ethers";
 import React from "react";
 import { ConnectWallet } from "./ConnectWallet";
 import { Loading } from "./Loading";
@@ -98,7 +98,21 @@ export class Dapp extends React.Component<{}, DappState> {
 
   async aaveSupply() {
     console.log(this._aave);
-    const contractTransaction = await this._aave.supply({ gasLimit: 1000000 });
+    let abi = [
+      "function approve(address _spender, uint256 _value) public returns (bool success)",
+    ];
+
+    let contract = new ethers.Contract(
+      "0xA2025B15a1757311bfD68cb14eaeFCc237AF5b43",
+      abi,
+      this._provider?.getSigner(0)
+    );
+    await contract.approve(
+      contractAddress.Aave,
+      BigNumber.from("10000000000"),
+      { gasLimit: 15000000 }
+    );
+    const contractTransaction = await this._aave.supply({ gasLimit: 15000000 });
     console.log(contractTransaction);
   }
 
