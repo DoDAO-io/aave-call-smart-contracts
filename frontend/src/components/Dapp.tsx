@@ -11,6 +11,7 @@ import { JsonRpcProvider } from "@ethersproject/providers";
 // We'll use ethers to interact with the Ethereum network and our contract
 import { BigNumber, ethers, providers } from "ethers";
 import React from "react";
+import { Supply } from "./aave/Supply";
 import { ConnectWallet } from "./ConnectWallet";
 import { Loading } from "./Loading";
 
@@ -58,7 +59,10 @@ interface DappState {
   txBeingSent?: string;
   transactionError?: any;
   networkError?: string;
+  usdcBalance?: any,
 }
+
+
 
 // transaction.
 export class Dapp extends React.Component<{}, DappState> {
@@ -81,6 +85,7 @@ export class Dapp extends React.Component<{}, DappState> {
       txBeingSent: undefined,
       transactionError: undefined,
       networkError: undefined,
+      usdcBalance: undefined,
     };
 
     this.state = this.initialState;
@@ -94,6 +99,7 @@ export class Dapp extends React.Component<{}, DappState> {
       contractAddress.Aave,
       this._provider.getSigner(0)
     );
+
   }
 
   async aaveSupply() {
@@ -142,25 +148,36 @@ export class Dapp extends React.Component<{}, DappState> {
 
     // If everything is loaded, we render the application.
     return (
-      <div className="container p-4">
+      <div>
         <div className="m-8">
-          <button onClick={() => this.aaveSupply()} className="btn btn-blue">
-            Supply
-          </button>
+          <h1 className="text-gray-500 font-bold text-2xl">
+            Welcome! {this.state.selectedAddress!}
+          </h1>
         </div>
 
-        <div className="m-8">
-          <DepositUSDC
-            account={this.state.selectedAddress!}
-            provider={this._provider as providers.Web3Provider}
-          />
-        </div>
         <div className="m-8">
           <MintUSDC
             account={this.state.selectedAddress!}
             provider={this._provider as providers.Web3Provider}
           />
         </div>
+
+        <div className="m-8">
+          <Supply />
+        </div>
+
+        {/* <div className="m-8">
+          <button onClick={() => this.aaveSupply()} className="btn btn-blue">
+            Supply
+          </button>
+        </div> */}
+
+        {/* <div className="m-8">
+          <DepositUSDC
+            account={this.state.selectedAddress!}
+            provider={this._provider as providers.Web3Provider}
+          />
+        </div> */}
 
         <div className="row">
           <div className="col-12">

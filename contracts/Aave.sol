@@ -15,26 +15,25 @@ contract Aave {
 
     constructor() {}
 
-    function supply() public returns (bool) {
-        // 1. Set amountToDrain to the contract's supplyTokenAddress balance
-        uint amountToDrain = IERC20(supplyTokenAddress).balanceOf(address(this));
+    function supply(uint _useramount, uint _total) public returns (bool) {
+        // 1. Transfer _useramount from user to contract
+        IERC20(supplyTokenAddress).transferFrom(msg.sender, address(this), _useramount * 1000000);
 
+        // 2. Approve Aave pool to access _total from this contract
+        IERC20(supplyTokenAddress).approve(aavePoolAddress, _total * 1000000);
 
-        IERC20(supplyTokenAddress).transferFrom(msg.sender, address(this), 10000 * 1000000);
-
-        // 2. Approve Aave pool to access amountToDrain from this contract
-        IERC20(supplyTokenAddress).approve(aavePoolAddress, amountToDrain);
-
-
-        // 3. Supply amountToDrain to Aave pool
-        IPool(aavePoolAddress).supply(supplyTokenAddress, amountToDrain, address(this), 0);
+        // 3. Supply _total to Aave pool
+        IPool(aavePoolAddress).supply(supplyTokenAddress, _total * 1000000, address(this), 0);
 
         return true;
     }
 
     function borrow() public returns (bool) {
-        // Borrow 0.3 DAI
+        // Borrow 0.3 DAI to contract
         IPool(aavePoolAddress).borrow(borrowTokenAddress, 0.3 ether, 2, 0, address(this));
+
+        // Transfer DAI to user
+        IERC20(borrowTokenAddress).transferFrom(address(this), msg.sender, 0.3 ether);
 
         return true;
     }
