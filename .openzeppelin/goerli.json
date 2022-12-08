@@ -75,6 +75,78 @@
           }
         }
       }
+    },
+    "593331126f0be82e825f09469cc8d687d33469ac365decf63eea7f4bd7956b22": {
+      "address": "0x237ab1de2c398c4f97A9B9C2a8eb4B599074e922",
+      "txHash": "0x3ddd561dd74af108d8b950d649520f6a1d96eb1eb1196691ccc516660b508f02",
+      "layout": {
+        "solcVersion": "0.8.10",
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "label": "borrowTokenAddress",
+            "offset": 2,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "Aave",
+            "src": "contracts/Aave.sol:16"
+          },
+          {
+            "label": "supplyTokenAddress",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "Aave",
+            "src": "contracts/Aave.sol:17"
+          },
+          {
+            "label": "aavePoolAddress",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "Aave",
+            "src": "contracts/Aave.sol:18"
+          },
+          {
+            "label": "dataProviderAddress",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_address",
+            "contract": "Aave",
+            "src": "contracts/Aave.sol:19"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
     }
   }
 }

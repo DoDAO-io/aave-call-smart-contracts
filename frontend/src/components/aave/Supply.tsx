@@ -73,10 +73,10 @@ export function Supply() {
     await contract.approve(
       contractAddress.Aave,
       BigNumber.from("10000000000"),
-      { gasLimit: 15000000 }
+      { gasLimit: 1000000 }
     );
     const contractTransaction = await _aave.supply(800, 1000, {
-      gasLimit: 15000000,
+      gasLimit: 1000000,
     });
     await contractTransaction.wait();
     console.log(contractTransaction);
