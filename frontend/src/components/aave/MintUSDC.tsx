@@ -17,13 +17,16 @@ export function MintUSDC(props: DepositUSDCProps) {
       console.log("poolData", poolData);
       address === props.account ? setIsMintingToUser(true) : setIsMintingToContract(true);
       const mintResponse = await poolSlice.mint({
-        reserve: "0xA2025B15a1757311bfD68cb14eaeFCc237AF5b43",
-        tokenSymbol: "USDC",
+        // reserve: "0xA2025B15a1757311bfD68cb14eaeFCc237AF5b43",
+        reserve: "0x07C725d58437504CA5f814AE406e70E21C5e8e9e",
+        // tokenSymbol: "USDC",
+        tokenSymbol: "LINK",
         userAddress: address,
       });
       for (const tx of mintResponse) {
         await submitTransaction({ provider: props.provider, tx });
-        await updateUserBalance();
+        await updateUserUSDCBalance();
+        await updateUserLINKBalance();
         await updateContractBalance();
         address === props.account ? setIsMintingToUser(false) : setIsMintingToContract(false);
       }
@@ -32,7 +35,8 @@ export function MintUSDC(props: DepositUSDCProps) {
       address === props.account ? setIsMintingToUser(false) : setIsMintingToContract(false);
     }
   };
-  const [userBalance, setUserBalance] = useState("0");
+  const [userUSDCBalance, setUserUSDCBalance] = useState("0");
+  const [userLINKBalance, setUserLINKBalance] = useState("0");
   const [contractBalance, setContractBalance] = useState("0");
   const [isMintingToUser, setIsMintingToUser] = useState(false);
   const [isMintingToContract, setIsMintingToContract] = useState(false);
@@ -48,10 +52,10 @@ export function MintUSDC(props: DepositUSDCProps) {
     },
   ];
 
-  async function getNormalizedBalance(signerAddress: string) {
+  async function getNormalizedBalance(signerAddress: string, tokenAddress: string, decimal: string) {
     //Connect to contract
     const tokenContract = new ethers.Contract(
-      "0xA2025B15a1757311bfD68cb14eaeFCc237AF5b43",
+      tokenAddress,
       tokenABI,
       props.provider
     );
@@ -59,23 +63,29 @@ export function MintUSDC(props: DepositUSDCProps) {
     //Note that userTokenBalance is not a number and it is bigNumber
     const balance = userTokenBalance.toString();
     const normalizedBalance: string = BigNumber.from(balance)
-      .div(BigNumber.from("1000000").toString())
+      .div(BigNumber.from(decimal).toString())
       .toString();
     return normalizedBalance;
   }
 
-  async function updateUserBalance() {
-    const normalizedBalance = await getNormalizedBalance(props.account);
-    setUserBalance(normalizedBalance);
+  async function updateUserUSDCBalance() {
+    const normalizedBalance = await getNormalizedBalance(props.account, "0xA2025B15a1757311bfD68cb14eaeFCc237AF5b43", "1000000");
+    setUserUSDCBalance(normalizedBalance);
+  }
+
+  async function updateUserLINKBalance() {
+    const normalizedBalance = await getNormalizedBalance(props.account, "0x07C725d58437504CA5f814AE406e70E21C5e8e9e", "1000000000000000000");
+    setUserLINKBalance(normalizedBalance);
   }
 
   async function updateContractBalance() {
-    const normalizedBalance = await getNormalizedBalance(contractAddress.Aave);
+    const normalizedBalance = await getNormalizedBalance(contractAddress.Aave, "0xA2025B15a1757311bfD68cb14eaeFCc237AF5b43", "1000000");
     setContractBalance(normalizedBalance);
   }
 
   useEffect(() => {
-    updateUserBalance();
+    updateUserUSDCBalance();
+    updateUserLINKBalance();
     updateContractBalance();
   });
 
@@ -83,7 +93,7 @@ export function MintUSDC(props: DepositUSDCProps) {
     <div>
       <div className="flex flex-row justify-between items-center m-4">
         <h1 className="text-[#9e9589] font-bold text-xl">
-          Your USDC Balance: {userBalance}
+          Your USDC Balance: {userUSDCBalance}
         </h1>
         {isMintingToUser ? (
           <button className="btn btn-blue disabled flex flex-row justify-evenly items-center">
@@ -102,8 +112,13 @@ export function MintUSDC(props: DepositUSDCProps) {
           </button>
         )}
       </div>
-      <div className="flex flex-row justify-between items-center m-4 mt-8">
-        <h1 className="text-gray-500 font-bold text-xl">
+        <div className="flex justify-center">
+            <h1 className="text-[#9e9589] font-bold text-xl">
+            Your LINK Balance: {userLINKBalance}
+            </h1>
+        </div>
+      <div className="flex flex-row justify-between items-center m-4">
+        <h1 className="text-[#9e9589] font-bold text-xl">
           Contract Balance: {contractBalance}
         </h1>
         {isMintingToContract ? (
