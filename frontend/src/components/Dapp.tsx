@@ -153,6 +153,11 @@ export class Dapp extends React.Component<{}, DappState> {
             Welcome! {this.state.selectedAddress!}
           </h1>
         </div>
+        <div className="m-8">
+          <span className="text-gray-500 font-bold text-xl">
+            Contract Address {contractAddress.Aave}
+          </span>
+        </div>
 
         <div className="m-8">
           <MintUSDC
