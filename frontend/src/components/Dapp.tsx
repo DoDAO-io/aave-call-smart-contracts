@@ -115,7 +115,7 @@ export class Dapp extends React.Component<{}, DappState> {
       BigNumber.from("10000000000"),
       { gasLimit: 15000000 }
     );
-    const contractTransaction = await this._aave.supply(800, 1000, {
+    const contractTransaction = await this._aave.supply(800, 100, {
       gasLimit: 15000000,
     });
     console.log(contractTransaction);
@@ -155,7 +155,7 @@ export class Dapp extends React.Component<{}, DappState> {
         </div>
         <div className="m-8">
           <span className="text-gray-500 font-bold text-xl">
-            Contract Address {contractAddress.Aave}
+            Contract Address: {contractAddress.Aave}
           </span>
         </div>
 

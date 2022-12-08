@@ -15,7 +15,7 @@ export function MintUSDC(props: DepositUSDCProps) {
 
       const poolData = await poolSlice.getPoolData();
       console.log("poolData", poolData);
-      setIsLoading(true);
+      address === props.account ? setIsMintingToUser(true) : setIsMintingToContract(true);
       const mintResponse = await poolSlice.mint({
         reserve: "0xA2025B15a1757311bfD68cb14eaeFCc237AF5b43",
         tokenSymbol: "USDC",
@@ -25,16 +25,17 @@ export function MintUSDC(props: DepositUSDCProps) {
         await submitTransaction({ provider: props.provider, tx });
         await updateUserBalance();
         await updateContractBalance();
-        setIsLoading(false);
+        address === props.account ? setIsMintingToUser(false) : setIsMintingToContract(false);
       }
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
+      address === props.account ? setIsMintingToUser(false) : setIsMintingToContract(false);
     }
   };
   const [userBalance, setUserBalance] = useState("0");
   const [contractBalance, setContractBalance] = useState("0");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isMintingToUser, setIsMintingToUser] = useState(false);
+  const [isMintingToContract, setIsMintingToContract] = useState(false);
 
   const tokenABI = [
     // balanceOf
@@ -84,14 +85,13 @@ export function MintUSDC(props: DepositUSDCProps) {
         <h1 className="text-[#9e9589] font-bold text-xl">
           Your USDC Balance: {userBalance}
         </h1>
-        {isLoading ? (
+        {isMintingToUser ? (
           <button className="btn btn-blue disabled flex flex-row justify-evenly items-center">
             <p className="text-gray-300">Minting...</p>
                 <div
               className="w-6 h-6 rounded-full animate-spin
                     border-4 border-solid border-gray-300 border-t-transparent ml-5"
             ></div>
-            <p>Minting...</p>
           </button>
         ) : (
           <button
@@ -106,13 +106,13 @@ export function MintUSDC(props: DepositUSDCProps) {
         <h1 className="text-gray-500 font-bold text-xl">
           Contract Balance: {contractBalance}
         </h1>
-        {isLoading ? (
+        {isMintingToContract ? (
           <button className="btn btn-blue disabled flex flex-row justify-evenly items-center">
-            <div
+            <p className="text-gray-300">Minting...</p>
+                <div
               className="w-6 h-6 rounded-full animate-spin
-                    border-4 border-solid border-white-500 border-t-transparent mr-5"
+                    border-4 border-solid border-gray-300 border-t-transparent ml-5"
             ></div>
-            <p>Minting...</p>
           </button>
         ) : (
           <button

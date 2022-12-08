@@ -62,38 +62,38 @@ export function Supply() {
   }
   async function aaveSupply() {
     try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      //Get connected wallet address
-      const signerAddress = await signer.getAddress();
-      //Connect to contract
-      const _aave = Aave__factory.connect(contractAddress.Aave, signer);
-      console.log(_aave);
-      setIsSupplying(true);
-      let abi = [
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        //Get connected wallet address
+        const signerAddress = await signer.getAddress();
+        //Connect to contract
+        const _aave = Aave__factory.connect(contractAddress.Aave, signer);
+        console.log(_aave);
+        setIsSupplying(true);
+        let abi = [
         "function approve(address _spender, uint256 _value) public returns (bool success)",
-      ];
+        ];
 
-      let contract = new ethers.Contract(
+        let contract = new ethers.Contract(
         "0xA2025B15a1757311bfD68cb14eaeFCc237AF5b43",
         abi,
         provider?.getSigner(0)
-      );
-      await contract.approve(
+        );
+        await contract.approve(
         contractAddress.Aave,
         BigNumber.from("10000000000"),
-        { gasLimit: 1000000 }
-      );
-      const contractTransaction = await _aave.supply(800, 100, {
-        gasLimit: 1000000,
-      });
-      await contractTransaction.wait();
-      setIsSupplying(false);
-      console.log(contractTransaction);
-      getBalance();
+        { gasLimit: 15000000 }
+        );
+        const contractTransaction = await _aave.supply(800, 100, {
+        gasLimit: 15000000,
+        });
+        await contractTransaction.wait();
+        setIsSupplying(false);
+        console.log(contractTransaction);
+        getBalance();
     } catch (error) {
-      console.log(error);
-      setIsSupplying(false);
+        console.log(error);
+        setIsSupplying(false);
     }
   }
 
@@ -140,18 +140,17 @@ export function Supply() {
         </div>
       </div>
       <div className="flex justify-center">
-        {isSupplying ? (
-          <button className="btn btn-blue disabled flex flex-row justify-evenly">
-            <div
-              className="w-6 h-6 rounded-full animate-spin
-                    border-4 border-solid border-gray-300 border-t-transparent mr-5"
-            ></div>
-            <p className="text-gray-300">Supplying...</p>
-          </button>
+      {isSupplying ? (
+            <button className="btn btn-blue disabled flex flex-row justify-evenly">
+                <p className="text-gray-300">Supplying...</p> 
+                <div className="w-6 h-6 rounded-full animate-spin
+                    border-4 border-solid border-gray-300 border-t-transparent ml-5">
+                </div>
+            </button>
         ) : (
-          <button onClick={() => aaveSupply()} className="btn btn-blue">
-                <p className="text-gray-300">Supply</p>
-          </button>
+            <button onClick={() => aaveSupply()} className="btn btn-blue">
+                <p className="text-gray-300">Supply</p> 
+            </button>
         )}
       </div>
       <div className="md:flex md:items-center mb-6 mt-6">
@@ -170,25 +169,23 @@ export function Supply() {
         </div>
       </div>
       <div className="flex justify-center">
-        {isBorrowing ? (
-          <button className="btn btn-blue disabled flex flex-row justify-evenly">
-            <div
-              className="w-6 h-6 rounded-full animate-spin
-                    border-4 border-solid border-gray-300 border-t-transparent mr-5"
-            ></div>
-            <p className="text-gray-300">Borrowing...</p>
-          </button>
+      {isBorrowing ? (
+            <button className="btn btn-blue disabled flex flex-row justify-evenly">
+                <p className="text-gray-300">Borrowing...</p>
+                <div className="w-6 h-6 rounded-full animate-spin
+                    border-4 border-solid border-gray-300 border-t-transparent ml-5">
+                </div> 
+            </button>
         ) : (
-          <button onClick={() => aaveSupply()} className="btn btn-blue">
+            <button onClick={() => aaveSupply()} className="btn btn-blue">
                 <p className="text-gray-300">Borrow</p>
-          </button>
+            </button>
         )}
       </div>
       <div className="flex flex-row justify-evenly items-center m-10">
         <p className="text-[#9e9589]">Don't see the updates?</p>
         <button onClick={refreshPage} className="btn btn-blue">
-          <p className="text-gray-300">Reload!
-        </p>
+            <p className="text-gray-300">Reload!</p>
         </button>
       </div>
     </div>
