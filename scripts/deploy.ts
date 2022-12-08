@@ -1,4 +1,4 @@
-import { ethers } from "hardhat";
+const { ethers, upgrades } = require("hardhat");
 import { Aave } from "./../typechain-types/contracts/Aave";
 
 const path = require("path");
@@ -31,7 +31,7 @@ async function main() {
   const lockedAmount = ethers.utils.parseEther("0.001");
 
   const Aave = await ethers.getContractFactory("Aave");
-  const aave = await Aave.deploy();
+  const aave = await upgrades.deployProxy(Aave);
   await aave.deployed();
 
   console.log("Token address:", aave.address);

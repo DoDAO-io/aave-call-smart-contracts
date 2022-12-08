@@ -59,10 +59,8 @@ interface DappState {
   txBeingSent?: string;
   transactionError?: any;
   networkError?: string;
-  usdcBalance?: any,
+  usdcBalance?: any;
 }
-
-
 
 // transaction.
 export class Dapp extends React.Component<{}, DappState> {
@@ -99,7 +97,6 @@ export class Dapp extends React.Component<{}, DappState> {
       contractAddress.Aave,
       this._provider.getSigner(0)
     );
-
   }
 
   async aaveSupply() {
@@ -118,7 +115,9 @@ export class Dapp extends React.Component<{}, DappState> {
       BigNumber.from("10000000000"),
       { gasLimit: 15000000 }
     );
-    const contractTransaction = await this._aave.supply({ gasLimit: 15000000 });
+    const contractTransaction = await this._aave.supply(800, 1000, {
+      gasLimit: 15000000,
+    });
     console.log(contractTransaction);
   }
 
