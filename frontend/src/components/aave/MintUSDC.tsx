@@ -17,10 +17,8 @@ export function MintUSDC(props: DepositUSDCProps) {
       console.log("poolData", poolData);
       address === props.account ? setIsMintingToUser(true) : setIsMintingToContract(true);
       const mintResponse = await poolSlice.mint({
-        // reserve: "0xA2025B15a1757311bfD68cb14eaeFCc237AF5b43",
-        reserve: "0x07C725d58437504CA5f814AE406e70E21C5e8e9e",
-        // tokenSymbol: "USDC",
-        tokenSymbol: "LINK",
+        reserve: "0xA2025B15a1757311bfD68cb14eaeFCc237AF5b43",
+        tokenSymbol: "USDC",
         userAddress: address,
       });
       for (const tx of mintResponse) {
