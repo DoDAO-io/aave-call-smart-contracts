@@ -81,14 +81,15 @@ export function MintUSDC(props: DepositUSDCProps) {
   return (
     <div>
       <div className="flex flex-row justify-between items-center m-4">
-        <h1 className="text-gray-500 font-bold text-xl">
+        <h1 className="text-[#9e9589] font-bold text-xl">
           Your USDC Balance: {userBalance}
         </h1>
         {isLoading ? (
           <button className="btn btn-blue disabled flex flex-row justify-evenly items-center">
-            <div
+            <p className="text-gray-300">Minting...</p>
+                <div
               className="w-6 h-6 rounded-full animate-spin
-                    border-4 border-solid border-white-500 border-t-transparent mr-5"
+                    border-4 border-solid border-gray-300 border-t-transparent ml-5"
             ></div>
             <p>Minting...</p>
           </button>
@@ -118,7 +119,7 @@ export function MintUSDC(props: DepositUSDCProps) {
             onClick={() => mintOneUSDC(contractAddress.Aave)}
             className="btn btn-blue"
           >
-            Mint 10K USDC
+            <p className="text-gray-300">Mint 10K USDC</p>
           </button>
         )}
       </div>

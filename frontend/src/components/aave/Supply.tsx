@@ -103,21 +103,21 @@ export function Supply() {
 
   return (
     <div className="m-8">
-      <p className="text-gray-500 font-bold">
+      <p className="text-[#9e9589] font-bold">
         We will add to the amount you supply based on your credit score.
       </p>
-      <p className="text-gray-500 font-bold text-xl">
+      <p className="text-[#9e9589] font-bold text-xl">
         Available USDC: {balance}
       </p>
       <div className="md:flex md:items-center mb-6 mt-6">
         <div className="md:w-1/3">
-          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+          <label className="block text-[#9e9589] font-bold md:text-right mb-1 md:mb-0 pr-4">
             Supply Amount
           </label>
         </div>
         <div className="md:w-2/3">
           <input
-            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+            className="bg-gray-200 appearance-none border-2 border-gray-700 rounded w-full py-2 px-4 text-gray-700 leading-tight bg-gray-800 focus:outline-none focus:bg-gray-800 focus:border-blue-500"
             type="number"
             value={supplyAmount}
             onChange={handleSupply}
@@ -126,13 +126,13 @@ export function Supply() {
       </div>
       <div className="md:flex md:items-center mb-6">
         <div className="md:w-1/3">
-          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+          <label className="block text-[#9e9589] font-bold md:text-right mb-1 md:mb-0 pr-4">
             Credit Score (0-100)
           </label>
         </div>
         <div className="md:w-2/3">
           <input
-            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+            className="bg-gray-200 appearance-none border-2 border-gray-700 rounded w-full py-2 px-4 text-gray-700 leading-tight bg-gray-800 focus:outline-none focus:bg-gray-800 focus:border-blue-500"
             type="number"
             value={score}
             onChange={handleScore}
@@ -144,25 +144,25 @@ export function Supply() {
           <button className="btn btn-blue disabled flex flex-row justify-evenly">
             <div
               className="w-6 h-6 rounded-full animate-spin
-                    border-4 border-solid border-white-500 border-t-transparent mr-5"
+                    border-4 border-solid border-gray-300 border-t-transparent mr-5"
             ></div>
-            <p>Supplying...</p>
+            <p className="text-gray-300">Supplying...</p>
           </button>
         ) : (
           <button onClick={() => aaveSupply()} className="btn btn-blue">
-            Supply
+                <p className="text-gray-300">Supply</p>
           </button>
         )}
       </div>
       <div className="md:flex md:items-center mb-6 mt-6">
         <div className="md:w-1/3">
-          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+          <label className="block text-[#9e9589] font-bold md:text-right mb-1 md:mb-0 pr-4">
             Borrow Amount
           </label>
         </div>
         <div className="md:w-2/3">
           <input
-            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+            className="bg-gray-200 appearance-none border-2 border-gray-700 rounded w-full py-2 px-4 text-gray-700 leading-tight bg-gray-800 focus:outline-none focus:bg-gray-800 focus:border-blue-500"
             type="number"
             value={borrowAmount}
             onChange={handleBorrow}
@@ -174,20 +174,21 @@ export function Supply() {
           <button className="btn btn-blue disabled flex flex-row justify-evenly">
             <div
               className="w-6 h-6 rounded-full animate-spin
-                    border-4 border-solid border-white-500 border-t-transparent mr-5"
+                    border-4 border-solid border-gray-300 border-t-transparent mr-5"
             ></div>
-            <p>Borrowing...</p>
+            <p className="text-gray-300">Borrowing...</p>
           </button>
         ) : (
           <button onClick={() => aaveSupply()} className="btn btn-blue">
-            Borrow
+                <p className="text-gray-300">Borrow</p>
           </button>
         )}
       </div>
       <div className="flex flex-row justify-evenly items-center m-10">
-        <p>Don't see the updates?</p>
+        <p className="text-[#9e9589]">Don't see the updates?</p>
         <button onClick={refreshPage} className="btn btn-blue">
-          Reload!
+          <p className="text-gray-300">Reload!
+        </p>
         </button>
       </div>
     </div>
