@@ -149,7 +149,7 @@ export class Dapp extends React.Component<{}, DappState> {
     return (
       <div>
         <div className="m-8">
-          <h1 className="text-gray-500 font-bold text-2xl">
+          <h1 className="text-[#9e9589] font-bold text-2xl">
             Welcome! {this.state.selectedAddress!}
           </h1>
         </div>
