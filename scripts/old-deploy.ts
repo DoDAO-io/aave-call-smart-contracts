@@ -1,9 +1,8 @@
-import { ethers } from "hardhat";
-import { Aave } from "./../frontend/src/contracts/typechain-types/contracts/Aave";
+import { ethers, tenderly } from "hardhat";
 
 const path = require("path");
 
-function saveContractAdresses(aave: Aave) {
+function saveContractAdresses(address: string) {
   const fs = require("fs");
   const contractsDir = path.join(
     __dirname,
@@ -19,7 +18,7 @@ function saveContractAdresses(aave: Aave) {
 
   fs.writeFileSync(
     path.join(contractsDir, "contract-address.json"),
-    JSON.stringify({ Aave: aave.address }, undefined, 2)
+    JSON.stringify({ Aave: address }, undefined, 2)
   );
 }
 
@@ -31,13 +30,19 @@ async function main() {
   const lockedAmount = ethers.utils.parseEther("0.001");
 
   const Aave = await ethers.getContractFactory("Aave");
+  console.log("Start deploying Aave contract");
   const aave = await Aave.deploy();
   await aave.deployed();
 
-  console.log("Token address:", aave.address);
+  console.log("Contract address:", aave.address);
 
   // We also save the contract's artifacts and address in the frontend directory
-  saveContractAdresses(aave);
+  saveContractAdresses(aave.address);
+
+  await tenderly.persistArtifacts({
+    name: "Aave",
+    address: aave.address,
+  });
 
   console.log(
     `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${aave.address}`

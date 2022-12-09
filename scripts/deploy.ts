@@ -1,9 +1,8 @@
-const { ethers, upgrades } = require("hardhat");
-import { Aave } from "./../typechain-types/contracts/Aave";
+import { ethers, upgrades } from "hardhat";
 
 const path = require("path");
 
-function saveContractAdresses(aave: Aave) {
+function saveContractAdresses(address: string) {
   const fs = require("fs");
   const contractsDir = path.join(
     __dirname,
@@ -19,7 +18,7 @@ function saveContractAdresses(aave: Aave) {
 
   fs.writeFileSync(
     path.join(contractsDir, "contract-address.json"),
-    JSON.stringify({ Aave: aave.address }, undefined, 2)
+    JSON.stringify({ Aave: address }, undefined, 2)
   );
 }
 
@@ -37,7 +36,7 @@ async function main() {
   console.log("Token address:", aave.address);
 
   // We also save the contract's artifacts and address in the frontend directory
-  saveContractAdresses(aave);
+  saveContractAdresses(aave.address);
 
   console.log(
     `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${aave.address}`

@@ -1,6 +1,9 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@openzeppelin/hardhat-upgrades";
 import "@nomicfoundation/hardhat-toolbox";
+import * as tdly from "@tenderly/hardhat-tenderly";
+
+tdly.setup({ automaticVerifications: true });
 
 require("dotenv").config();
 
@@ -32,6 +35,10 @@ const config: HardhatUserConfig = {
       url: process.env.SCROLL_TESTNET_URL,
       accounts: [ACCOUNT_PRIVATE_KEY],
     },
+  },
+  tenderly: {
+    project: process.env.TENDERLY_PROJECT ?? "",
+    username: process.env.TENDERLY_USERNAME ?? "",
   },
 };
 

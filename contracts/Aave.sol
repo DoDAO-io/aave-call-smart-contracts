@@ -9,6 +9,8 @@ import "@aave/core-v3/contracts/misc/AaveOracle.sol";
 import "@aave/core-v3/contracts/protocol/libraries/configuration/ReserveConfiguration.sol";
 import "@aave/core-v3/contracts/protocol/libraries/types/DataTypes.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "hardhat/console.sol";
+
 
 contract Aave {
 
@@ -21,51 +23,50 @@ contract Aave {
     using ReserveConfiguration for DataTypes.ReserveConfigurationMap;
 
 
-    function supply(uint _userAmount, uint healthScore) public returns (bool) {
+    function supply(uint _userAmount) public returns (bool) {
 
-        uint _total = _userAmount + _userAmount * ((healthScore * 20) / 10000);
+        // Top up the collateral to double
+        uint _total = _userAmount * 2;
+
 
         // 1. Transfer _useramount from user to contract
         IERC20(supplyTokenAddress).transferFrom(msg.sender, address(this), _userAmount * 1000000);
 
-        IERC20(supplyTokenAddress).approve(aavePoolAddress, _total * 1000000);
-
-
+        // Get the reserveData as that contains the threshold i.e. the max amount of assert that can be bought against USDC
         DataTypes.ReserveData memory reserveData = IPool(aavePoolAddress).getReserveData(supplyTokenAddress);
 
-        emit AssetPrice("USDC", IPriceOracleGetter(aaveOracleAddress).getAssetPrice(supplyTokenAddress));
-        emit AssetPrice("LINK", IPriceOracleGetter(aaveOracleAddress).getAssetPrice(borrowTokenAddress));
-
+        // prices are returned in USD with 6 decimal places
         uint256 linkPrice = IPriceOracleGetter(aaveOracleAddress).getAssetPrice(borrowTokenAddress);
+
+        // normalize the amount and reduce the six decimal digits
         uint256 linkPriceInUSDC = linkPrice / 100000000;
 
-
+        // threshold is returned as 8500, so we need to normalize it
         uint256 threshold = reserveData.configuration.getLiquidationThreshold();
 
-        emit FoundThreshold(threshold);
-
-        // 3. Supply _total to Aave pool
+        // 3. Supply _total i.e. double the users amount to Aave pool
+        IERC20(supplyTokenAddress).approve(aavePoolAddress, _total * 1000000);
         IPool(aavePoolAddress).supply(supplyTokenAddress, _total * 1000000, address(this), 0);
 
+        // divide by 10000 as the threshold is 8500 i.e. 85%
+        uint256 userUSDCBorrowAmount = (_userAmount * threshold) / 10000 ;
 
-        IPool(aavePoolAddress).borrow(borrowTokenAddress, (_total / linkPriceInUSDC) * 1 ether, 2, 0, msg.sender);
+        // USDC amount to be used for borrow - we borrow 1.5 times the max user limit
+        uint256 usdcBorrowAmount = (userUSDCBorrowAmount * 3) / 2 ;
 
+        // USDC amount to be used for borrow - we borrow 1.5 times the max user limit
+        uint256 numberOfLinkTokens = usdcBorrowAmount / linkPriceInUSDC ;
+
+        console.log("Trying to borrow %s link after adding %s USDC. Users eligible borrow amount is", numberOfLinkTokens, _total, userUSDCBorrowAmount);
+
+        // Borrow the LINK tokens from Aave
+        IPool(aavePoolAddress).borrow(borrowTokenAddress, numberOfLinkTokens * 1 ether, 2, 0, address(this));
+
+
+        // Transfer LINK to user
+        IERC20(borrowTokenAddress).transfer(msg.sender, numberOfLinkTokens * 1 ether);
 
         return true;
     }
 
-    function borrow() public returns (bool) {
-        // Borrow 0.3 DAI to contract
-        IPool(aavePoolAddress).borrow(borrowTokenAddress, 0.3 ether, 2, 0, address(this));
-
-        // Transfer DAI to user
-        IERC20(borrowTokenAddress).transferFrom(address(this), msg.sender, 0.3 ether);
-
-        return true;
-    }
-
-    event FoundThreshold(uint256 threshold);
-    event FoundTotal(uint256 total);
-    event FoundPrice(uint256 total);
-    event AssetPrice(string asset, uint256 total);
 }

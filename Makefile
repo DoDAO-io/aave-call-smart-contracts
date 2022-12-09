@@ -10,6 +10,8 @@ deploy-local:
 update-local:
 	npx hardhat run scripts/update.ts --network localhost
 goerli:
+	npx hardhat compile
+	npx hardhat run scripts/compile.ts
 	npx hardhat run scripts/old-deploy.ts --network goerli
 deploy-goerli:
 	npx hardhat run scripts/deploy.ts --network goerli
