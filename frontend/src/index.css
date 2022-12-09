@@ -36,11 +36,29 @@
 
 
  .btn {
-     @apply font-bold py-2 px-4 rounded;
+     @apply font-bold py-1 px-4 rounded;
  }
 .btn-blue {
     @apply bg-blue-500 text-white;
 }
+.btn-disabled {
+    @apply bg-gray-500 text-white;
+    cursor: not-allowed;
+}
 .btn-blue:hover {
     @apply bg-blue-700;
+}
+
+
+.bordered-container{
+   @apply border border-slate-400 rounded-lg text-gray-400;
+}
+
+.supply-table {
+    @apply table w-full text-left mt-2;
+    border-collapse: collapse;
+}
+.supply-table-row {
+    @apply table-row;
+    border-bottom: 1px solid rgb(148 163 184) !important;
 }

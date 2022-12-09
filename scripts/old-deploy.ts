@@ -1,4 +1,4 @@
-import { ethers, upgrades } from "hardhat";
+import { ethers, tenderly } from "hardhat";
 
 const path = require("path");
 
@@ -30,13 +30,19 @@ async function main() {
   const lockedAmount = ethers.utils.parseEther("0.001");
 
   const Aave = await ethers.getContractFactory("Aave");
-  const aave = await upgrades.deployProxy(Aave);
+  console.log("Start deploying Aave contract");
+  const aave = await Aave.deploy();
   await aave.deployed();
 
-  console.log("Token address:", aave.address);
+  console.log("Contract address:", aave.address);
 
   // We also save the contract's artifacts and address in the frontend directory
   saveContractAdresses(aave.address);
+
+  await tenderly.persistArtifacts({
+    name: "Aave",
+    address: aave.address,
+  });
 
   console.log(
     `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${aave.address}`

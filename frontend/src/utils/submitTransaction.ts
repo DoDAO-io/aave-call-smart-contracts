@@ -18,6 +18,7 @@ export async function submitTransaction({
     value: txData.value ? BigNumber.from(txData.value) : undefined,
     gasLimit: 10000000,
   });
+  await txResponse.wait();
   console.log("txResponse", txResponse);
   return txResponse;
 }
