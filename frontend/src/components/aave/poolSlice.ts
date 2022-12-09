@@ -84,6 +84,9 @@ export const createPoolSlice = (account: string, provider: Provider) => {
   }
   return {
     data: new Map(),
+    getPool: (): Pool => {
+      return getCorrectPool() as Pool;
+    },
     getPoolData: async () => {
       const currentChainId: number = marketInfo.chainId;
       const poolDataProviderContract = new UiPoolDataProvider({

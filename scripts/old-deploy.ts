@@ -1,5 +1,5 @@
 import { ethers } from "hardhat";
-import { Aave } from "./../typechain-types/contracts/Aave";
+import { Aave } from "./../frontend/src/contracts/typechain-types/contracts/Aave";
 
 const path = require("path");
 
