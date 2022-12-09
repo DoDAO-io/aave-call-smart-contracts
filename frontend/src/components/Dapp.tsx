@@ -1,6 +1,6 @@
-import { DepositUSDC } from "@components/aave/DepositUSDC";
 import { MintUSDC } from "@components/aave/MintUSDC";
 import contractAddress from "@contracts/contract-address.json";
+import { IERC20__factory } from "@contracts/typechain-types/factories/@openzeppelin/contracts/token/ERC20/IERC20__factory";
 
 // We import the contract's artifacts and address here, as we are going to be
 // using them with ethers
@@ -13,7 +13,6 @@ import { BigNumber, ethers, providers } from "ethers";
 import React from "react";
 import { Supply } from "./aave/Supply";
 import { ConnectWallet } from "./ConnectWallet";
-import { Loading } from "./Loading";
 
 // All the logic of this dapp is contained in the Dapp component.
 // These other components are just presentational ones: they don't have any
@@ -28,14 +27,6 @@ declare global {
     ethereum: any;
   }
 }
-
-// This is the Hardhat Network id that we set in our hardhat.config.js.
-// Here's a list of network ids https://docs.metamask.io/guide/ethereum-provider.html#properties
-// to use when deploying to other networks.
-const HARDHAT_NETWORK_ID = "1337";
-
-// This is an error code that indicates that the user canceled a transaction
-const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
 
 // This component is in charge of doing these things:
 //   1. It connects to the user's wallet
@@ -101,14 +92,10 @@ export class Dapp extends React.Component<{}, DappState> {
 
   async aaveSupply() {
     console.log(this._aave);
-    let abi = [
-      "function approve(address _spender, uint256 _value) public returns (bool success)",
-    ];
 
-    let contract = new ethers.Contract(
+    let contract = IERC20__factory.connect(
       "0xA2025B15a1757311bfD68cb14eaeFCc237AF5b43",
-      abi,
-      this._provider?.getSigner(0)
+      this._provider?.getSigner(0)!
     );
     await contract.approve(
       contractAddress.Aave,
@@ -148,17 +135,14 @@ export class Dapp extends React.Component<{}, DappState> {
     // If everything is loaded, we render the application.
     return (
       <div>
-        <div className="m-8">
-          <h1 className="text-[#9e9589] font-bold text-2xl">
-            Welcome! {this.state.selectedAddress!}
-          </h1>
+        <div className="bordered-container m-8">
+          <div className="m-4 flex justify-between">
+            <div>Welcome!:</div> <div> {this.state.selectedAddress!}</div>
+          </div>
+          <div className="m-4 flex justify-between">
+            <div>Contract Address:</div> <div>{contractAddress.Aave}</div>
+          </div>
         </div>
-        <div className="m-8">
-          <span className="text-gray-500 font-bold text-xl">
-            Contract Address: {contractAddress.Aave}
-          </span>
-        </div>
-
         <div className="m-8">
           <MintUSDC
             account={this.state.selectedAddress!}
@@ -167,21 +151,11 @@ export class Dapp extends React.Component<{}, DappState> {
         </div>
 
         <div className="m-8">
-          <Supply />
-        </div>
-
-        {/* <div className="m-8">
-          <button onClick={() => this.aaveSupply()} className="btn btn-blue">
-            Supply
-          </button>
-        </div> */}
-
-        {/* <div className="m-8">
-          <DepositUSDC
+          <Supply
             account={this.state.selectedAddress!}
             provider={this._provider as providers.Web3Provider}
           />
-        </div> */}
+        </div>
 
         <div className="row">
           <div className="col-12">
