@@ -24,9 +24,11 @@ export function Supply(props: SupplyProps) {
   const [usdcThreshold, setUSDCThreshold] = useState(0);
   const [linkPrice, setLinkPrice] = useState(0);
   const [mintableLink, setMintableLink] = useState(0);
+  const [topupLink, setTopUpLink] = useState(0);
 
   const handleSupply = (event) => {
     setSupplyAmount(event.target.value);
+    calculateLinks();
   };
 
   function refreshPage() {
@@ -47,7 +49,7 @@ export function Supply(props: SupplyProps) {
   async function getBalance() {
     const normalizedBalance = await getNormalizedBalance(
       props.provider,
-      props.account,
+      contractAddress.Aave,
       TokenType.USDC
     );
     setContractUSDCBalance(normalizedBalance.toNumber() || 0);
@@ -102,10 +104,18 @@ export function Supply(props: SupplyProps) {
     }
   }
 
+  function calculateLinks() {
+    setMintableLink((supplyAmount * usdcThreshold) / (100 * linkPrice));
+    setTopUpLink(
+      Math.floor((supplyAmount * usdcThreshold) / (100 * linkPrice * 2))
+    );
+  }
+
   useEffect(() => {
     getBalance();
     updateUserLINKBalance();
     updateReserveInfo();
+    calculateLinks();
   });
 
   return (
@@ -153,19 +163,27 @@ export function Supply(props: SupplyProps) {
             <div className="table-cell">{usdcThreshold}%</div>
           </div>
           <div className="supply-table-row">
+            <div className="table-cell">USDC Threshold</div>
+            <div className="table-cell">
+              {((supplyAmount * usdcThreshold) / 100).toFixed(0)} USDC
+            </div>
+          </div>
+          <div className="supply-table-row">
             <div className="table-cell">Link Price</div>
             <div className="table-cell">{linkPrice} USD</div>
           </div>
           <div className="supply-table-row">
             <div className="table-cell">Mintable Link</div>
-            <div className="table-cell">
-              {(supplyAmount / linkPrice).toFixed(0)} LINK
-            </div>
+            <div className="table-cell">{mintableLink.toFixed(0)} LINK</div>
           </div>
           <div className="supply-table-row text-green-700">
             <div className="table-cell ">TopLink Link</div>
+            <div className="table-cell">{topupLink} LINK</div>
+          </div>
+          <div className="supply-table-row text-green-700">
+            <div className="table-cell ">Total Link to Mint</div>
             <div className="table-cell">
-              {Math.floor(supplyAmount / (linkPrice * 2))} LINK
+              {Math.round(mintableLink + topupLink)} LINK
             </div>
           </div>
         </div>

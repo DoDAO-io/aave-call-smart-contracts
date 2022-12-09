@@ -29,7 +29,7 @@ contract Aave {
         uint _total = _userAmount * 2;
 
 
-        // 1. Transfer _useramount from user to contract
+        // Transfer _useramount from user to contract
         IERC20(supplyTokenAddress).transferFrom(msg.sender, address(this), _userAmount * 1000000);
 
         // Get the reserveData as that contains the threshold i.e. the max amount of assert that can be bought against USDC
@@ -44,7 +44,7 @@ contract Aave {
         // threshold is returned as 8500, so we need to normalize it
         uint256 threshold = reserveData.configuration.getLiquidationThreshold();
 
-        // 3. Supply _total i.e. double the users amount to Aave pool
+        // Supply _total i.e. double the users amount to Aave pool
         IERC20(supplyTokenAddress).approve(aavePoolAddress, _total * 1000000);
         IPool(aavePoolAddress).supply(supplyTokenAddress, _total * 1000000, address(this), 0);
 
