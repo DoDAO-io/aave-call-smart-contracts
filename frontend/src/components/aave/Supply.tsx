@@ -173,11 +173,11 @@ export function Supply(props: SupplyProps) {
             <div className="table-cell">{linkPrice} USD</div>
           </div>
           <div className="supply-table-row">
-            <div className="table-cell">Mintable Link</div>
+            <div className="table-cell">Mintable Link (Your eligibility)</div>
             <div className="table-cell">{mintableLink.toFixed(0)} LINK</div>
           </div>
           <div className="supply-table-row text-green-700">
-            <div className="table-cell ">TopLink Link</div>
+            <div className="table-cell ">TopUp Link (Added by contract)</div>
             <div className="table-cell">{topupLink} LINK</div>
           </div>
           <div className="supply-table-row text-green-700">
