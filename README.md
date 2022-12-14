@@ -19,6 +19,8 @@ To create the DApp we used the [starter dapp template](https://github.com/DoDAO-
 * MetaMask (Wallet browser extension)
 * Alchemy (node provider)
 
+# Code Setup
+
 To use the code in this repository, you will need to have Node.js and npm installed on your computer. Also, please make sure to set up Metamask and Alchemy accounts.
 
 Once you have these tools installed, you can follow these steps to setup the code:
